@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Welcome to the Dashboard</h1>
+    
+    <!-- Display meal information -->
+    <h2>Meal Information</h2>
+    <p>Breakfast: {{ breakfast }}</p>
+    <p>Lunch: {{ lunch }}</p>
+    <p>Dinner: {{ dinner }}</p>
+
+    <!-- Display options based on user role -->
+    {% if user_role == 'student' %}
+        <h2>Options for Students</h2>
+        <div id="cancel-meal-form">
+            <button onclick="cancelMeal('breakfast')">Cancel Breakfast</button>
+           <button onclick="cancelMeal('lunch')">Cancel Lunch</button>
+          <button onclick="cancelMeal('dinner')">Cancel Dinner</button>
+            <!--<button type="button" id="meal_btn" value="breakfast">Cancel Breakfast</button>
+            <button type="button" id="meal_btn" value="lunch" onclick="cancelMeal()">Cancel Lunch</button>
+            <button type="button" id="meal_btn" value="dinner" onclick="cancelMeal()">Cancel Dinner</button>-->
+            <!--<button type="submit" name="meal_type" value="breakfast">Cancel Breakfast</button>
+            <button type="submit" name="meal_type" value="lunch">Cancel Lunch</button>
+            <button type="submit" name="meal_type" value="dinner">Cancel Dinner</button>-->
+            </div>
+            <script>
+                function cancelMeal(mealType) {
+                    alert("Button clicked: " + mealType);
+                    $.ajax({
+                        url: '/cancel_meal',
+                        type: 'GET', // Change to 'GET' if your backend expects GET requests
+                        data: {'meal': mealType},
+                        success: function (response){
+                            console.log(response);
+                            // Handle success response if needed
+                        },
+                        error: function(error){
+                            console.log(error);
+                            // Handle error response if needed
+                        }
+                    });
+                }
+            </script>
+        
+        
+        
+        <form action="/make_request" method="POST">
+            <input type="text" name="request_text" placeholder="Enter your request">
+            <button type="submit">Submit Request</button>
+        </form>
+    {% elif user_role == 'management' %}
+        <h2>Options for Management</h2>
+        <a href="/edit_menu"><button>Edit Menu</button></a>
+        <a href="/view_requests"><button>View Requests</button></a>
+    {% endif %}
+</body>
+</html>
